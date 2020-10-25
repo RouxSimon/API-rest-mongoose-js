@@ -55,14 +55,4 @@ db.restaurants.updateMany(
     }]
 )
 
-
-myRouter.route('/restaurants/:restaurants_id')
-.get(function(req,res){  
-	let id = req.params.restaurants_id;
-	RestoModel.findOne({ "_id" : id }, function(err, resto) {
-		res.json({resto});
-	});
-});
-
-
 image post1.PNG
