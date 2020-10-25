@@ -1,0 +1,68 @@
+> use masterclass_project
+switched to db masterclass_project
+
+> db.createUser(
+{
+    user: "joe",
+    pwd: passwordPrompt(),
+    roles: [ "readWrite"]
+})
+Enter password:
+Successfully added user: { "user" : "joe", "roles" : [ "readWrite" ] }
+
+curl https://raw.githubusercontent.com/mongodb/docs-assets/geospatial/restaurants.json --output restaurants.json
+
+mongoimport --db=masterclass_project --collection=restaurants --file=restaurants.json
+
+db.restaurants.updateMany(
+    {}, 
+    [{ $set: 
+        { price: 
+            { rand: 
+                { $function: 
+                    {
+                        body: function() { return Math.random() * (100 - 2) + 2; },
+                        args: [],
+                        lang: "js"
+                    }
+                }
+            }
+        }
+    }]
+)
+
+db.restaurants.updateMany(
+    {}, 
+    [{ $set: 
+        { reviews: 
+            { rand: 
+                { $function: 
+                    {
+                        body: function() {
+                            let a = Math.random() * (5);
+                            let b = Math.random() * (5);
+                            let c = Math.random() * (5);
+                            let d = Math.random() * (5);
+                            let e = Math.random() * (5);
+                            return  [a,b,c,d,e]
+                        },
+                        args: [],
+                        lang: "js"
+                    }
+                }
+            }
+        }
+    }]
+)
+
+
+myRouter.route('/restaurants/:restaurants_id')
+.get(function(req,res){  
+	let id = req.params.restaurants_id;
+	RestoModel.findOne({ "_id" : id }, function(err, resto) {
+		res.json({resto});
+	});
+});
+
+
+image post1.PNG
